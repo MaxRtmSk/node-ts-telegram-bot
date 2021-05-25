@@ -1,10 +1,28 @@
+import * as dotenv from "dotenv";
 import TelegramBot from "node-telegram-bot-api";
-const token = '1887742426:AAElRmy2KUglYhvQ_UX-aaQPl5uPtMllmPw';
+dotenv.config();
+const token = process.env.TELEGRAM_TOKEN || '';
 console.log(token);
 const bot = new TelegramBot(token, { polling: true });
-bot.on('message', msg => {
-    const { text, chat } = msg;
-    const { id: chatId } = chat;
-    bot.sendMessage(chatId, `${text}`);
-    console.log(text, chatId);
-});
+bot.setMyCommands([
+    { command: '/start', description: 'Start' },
+    { command: '/info', description: 'Info' }
+]);
+const start = () => {
+    bot.on('message', async (msg) => {
+        const { text, chat } = msg;
+        const { id: chatId } = chat;
+        if (text === '/start') {
+            await bot.sendSticker(chatId, 'https://cdn.serif.com/affinity/img/photo/home/0121/og-photo-200120210858.jpg');
+            return bot.sendMessage(chatId, `Это учебный проект`);
+        }
+        if (text === '/info') {
+            return bot.sendMessage(chatId, `Тебя зовуь ${msg.from?.first_name}`);
+        }
+        if (text === '/game') {
+            await bot.sendMessage(chatId, `Сейчас я загадаю тебе число`);
+        }
+        return bot.sendMessage(chatId, `Я тебя не понимаю`);
+    });
+};
+start();
