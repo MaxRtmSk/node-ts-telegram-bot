@@ -1,6 +1,10 @@
-import dotenv from "dotenv";
-dotenv.config();
-var token = process.env.TELEGRAM_TOKEN;
+import TelegramBot from "node-telegram-bot-api";
+const token = '1887742426:AAElRmy2KUglYhvQ_UX-aaQPl5uPtMllmPw';
 console.log(token);
-//es2015
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLE1BQU0sTUFBTSxRQUFRLENBQUM7QUFHNUIsTUFBTSxDQUFDLE1BQU0sRUFBRSxDQUFDO0FBRWhCLElBQU0sS0FBSyxHQUFHLE9BQU8sQ0FBQyxHQUFHLENBQUMsY0FBYyxDQUFDO0FBRXpDLE9BQU8sQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUM7QUFDbkIsUUFBUSJ9
+const bot = new TelegramBot(token, { polling: true });
+bot.on('message', msg => {
+    const { text, chat } = msg;
+    const { id: chatId } = chat;
+    bot.sendMessage(chatId, `${text}`);
+    console.log(text, chatId);
+});
